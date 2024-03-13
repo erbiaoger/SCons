@@ -1,0 +1,22 @@
+env = Environment()
+
+# 设置头文件搜索路径
+env.Append(CPPPATH=['./include'])
+
+# 设置库文件搜索路径（如果静态库不在标准路径下）
+env.Append(LIBPATH=['./lib'])
+
+# 设置需要链接的库，注意不需要lib前缀和.a后缀
+env.Append(LIBS=['hello1'])
+
+source = Glob('src/*.cpp')
+
+# 编译main.cpp（假设它位于项目的根目录），并链接到libExample.a
+main_program = env.Program(target='main', source=source)
+
+# 清除.o文件
+# 清除生成的程序可以用 Clean(target, [files_to_clean])，但通常保留生成的可执行文件
+for obj in main_program[0].sources:
+    if str(obj).endswith('.o'):
+        env.Clean(main_program, obj)
+

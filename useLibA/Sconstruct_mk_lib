@@ -1,0 +1,27 @@
+import os
+
+env = Environment()
+
+# 定义源代码目录和构建输出目录
+source_dir = 'libA'
+build_dir = 'lib'
+
+# 确保构建目录存在
+if not os.path.exists(build_dir):
+    os.makedirs(build_dir)
+
+# 指定源文件
+# 这里假设所有的源文件都在libA文件夹下，且都需要被编译
+source_files = Glob(os.path.join(source_dir, '*.cpp'))
+
+# 构建静态库，假设你要创建的库名为libExample.a
+# 注意：SCons会自动添加前缀lib和后缀.a
+library = env.StaticLibrary(target='hello1', source=source_files)
+
+# 移动构建好的静态库到./lib文件夹
+# 注意：构建好的库名将是libExample.a
+env.Command(target=os.path.join(build_dir, 'libhello1.a'),
+            source=library,
+            action="cp $SOURCE $TARGET")
+
+
